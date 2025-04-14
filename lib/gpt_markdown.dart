@@ -42,6 +42,8 @@ class GptMarkdown extends StatelessWidget {
     this.unOrderedListBuilder,
     this.components,
     this.inlineComponents,
+    this.customComponents = const [],
+    this.customComponentsMap = const {},
   });
 
   /// The direction of the text.
@@ -151,6 +153,9 @@ class GptMarkdown extends StatelessWidget {
   //   );
   // }
 
+  final List<MarkdownComponent> customComponents;
+  final Map<String, MarkdownComponent> customComponentsMap;
+
   @override
   Widget build(BuildContext context) {
     String tex = data.trim();
@@ -195,6 +200,8 @@ class GptMarkdown extends StatelessWidget {
           unOrderedListBuilder: unOrderedListBuilder,
           components: components,
           inlineComponents: inlineComponents,
+        customComponents: customComponents,
+        customComponentsMap: customComponentsMap
         ),
       ),
     );

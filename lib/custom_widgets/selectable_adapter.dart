@@ -360,4 +360,14 @@ class _RenderSelectableAdapter extends RenderProxyBox
     _endHandle = null;
     super.dispose();
   }
+  
+  @override
+  // TODO: implement contentLength
+  int get contentLength => throw UnimplementedError();
+  
+  @override
+  SelectedContentRange? getSelection() {
+    // TODO: implement getSelection
+    throw UnimplementedError();
+  }
 }

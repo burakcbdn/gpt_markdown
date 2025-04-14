@@ -2,7 +2,6 @@ part of 'gpt_markdown.dart';
 
 /// Markdown components
 abstract class MarkdownComponent {
-  static final List<MarkdownComponent> components = [
     CodeBlockMd(),
     NewLines(),
     BlockQuote(),
@@ -24,6 +23,7 @@ abstract class MarkdownComponent {
     SourceTag(),
     IndentMd(),
   ];
+  static List<MarkdownComponent> get baseComponents => [
 
   static final List<MarkdownComponent> inlineComponents = [
     ImageMd(),
@@ -45,10 +45,24 @@ abstract class MarkdownComponent {
     final GptMarkdownConfig config,
     bool includeGlobalComponents,
   ) {
-    var components =
-        includeGlobalComponents
-            ? config.components ?? MarkdownComponent.components
-            : config.inlineComponents ?? MarkdownComponent.inlineComponents;
+    List<MarkdownComponent> components = [];
+
+    // add custom components
+    // insert custom components to beginning of the list
+    components.insertAll(
+      0,
+      config.customComponents,
+    );
+
+    for (var each in baseComponents) {
+      if (config.customComponentsMap.containsKey(each.runtimeType.toString())) {
+        components
+            .add(config.customComponentsMap[each.runtimeType.toString()]!);
+      } else {
+        components.add(each);
+      }
+    }
+
     List<InlineSpan> spans = [];
     Iterable<String> regexes = components.map<String>((e) => e.exp.pattern);
     final combinedRegex = RegExp(
@@ -930,7 +944,7 @@ class TableMd extends BlockMd {
         scrollDirection: Axis.horizontal,
         child: Table(
           textDirection: config.textDirection,
-          defaultColumnWidth: CustomTableColumnWidth(),
+          defaultColumnWidth: IntrinsicColumnWidth(),
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           border: TableBorder.all(
             width: 1,
