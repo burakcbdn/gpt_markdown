@@ -2,6 +2,7 @@ part of 'gpt_markdown.dart';
 
 /// Markdown components
 abstract class MarkdownComponent {
+  static List<MarkdownComponent> get baseComponents => [
     CodeBlockMd(),
     NewLines(),
     BlockQuote(),
@@ -23,7 +24,6 @@ abstract class MarkdownComponent {
     SourceTag(),
     IndentMd(),
   ];
-  static List<MarkdownComponent> get baseComponents => [
 
   static final List<MarkdownComponent> inlineComponents = [
     ImageMd(),
@@ -49,15 +49,24 @@ abstract class MarkdownComponent {
 
     // add custom components
     // insert custom components to beginning of the list
-    components.insertAll(
-      0,
-      config.customComponents,
-    );
+    components.insertAll(0, config.customComponents?.toList() ?? []);
 
-    for (var each in baseComponents) {
-      if (config.customComponentsMap.containsKey(each.runtimeType.toString())) {
-        components
-            .add(config.customComponentsMap[each.runtimeType.toString()]!);
+    List<MarkdownComponent> allComponents = [];
+
+    if (includeGlobalComponents) {
+      allComponents.addAll(baseComponents);
+    }
+
+    allComponents.addAll(inlineComponents);
+
+    for (var each in allComponents) {
+      if (config.customComponentsMap?.containsKey(
+            each.runtimeType.toString(),
+          ) ??
+          false) {
+        components.add(
+          config.customComponentsMap![each.runtimeType.toString()]!,
+        );
       } else {
         components.add(each);
       }
@@ -261,7 +270,7 @@ class NewLines extends InlineMd {
       text: "\n\n",
       style: TextStyle(
         fontSize: config.style?.fontSize ?? 14,
-        height: 1.15,
+        height: 1.3,
         color: config.style?.color,
       ),
     );
@@ -452,7 +461,7 @@ class OrderedList extends BlockMd {
           no: "$no.",
           textDirection: config.textDirection,
           style: (config.style ?? const TextStyle()).copyWith(
-            fontWeight: FontWeight.w100,
+            fontWeight: FontWeight.bold,
           ),
           child: child,
         );
@@ -733,11 +742,14 @@ class LatexMath extends InlineMd {
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
-      child: builder(
-        context,
-        workaround(mathText),
-        config.style ?? const TextStyle(),
-        true,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: builder(
+          context,
+          workaround(mathText),
+          config.style ?? const TextStyle(),
+          true,
+        ),
       ),
     );
   }

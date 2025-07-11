@@ -83,6 +83,8 @@ class GptMarkdownConfig {
     this.overflow,
     this.components,
     this.inlineComponents,
+    this.customComponents,
+    this.customComponentsMap,
   });
 
   /// The direction of the text.
@@ -142,6 +144,12 @@ class GptMarkdownConfig {
   /// The list of inline components.
   final List<MarkdownComponent>? inlineComponents;
 
+  /// The list of custom components.
+  final List<MarkdownComponent>? customComponents;
+
+  /// The list of custom components map.
+  final Map<String, MarkdownComponent>? customComponentsMap;
+
   /// A copy of the configuration with the specified parameters.
   GptMarkdownConfig copyWith({
     TextStyle? style,
@@ -163,6 +171,8 @@ class GptMarkdownConfig {
     final UnOrderedListBuilder? unOrderedListBuilder,
     final List<MarkdownComponent>? components,
     final List<MarkdownComponent>? inlineComponents,
+    final List<MarkdownComponent>? customComponents,
+    final Map<String, MarkdownComponent>? customComponentsMap,
   }) {
     return GptMarkdownConfig(
       style: style ?? this.style,

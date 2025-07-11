@@ -103,16 +103,19 @@ class OrderedListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: textDirection,
-      child: Row(
-        textBaseline: TextBaseline.alphabetic,
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        children: [
-          Padding(
-            padding: EdgeInsetsDirectional.only(start: padding, end: spacing),
-            child: Text.rich(TextSpan(text: no), style: _style),
-          ),
-          Expanded(child: child),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(top: 7),
+        child: Row(
+          textBaseline: TextBaseline.alphabetic,
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.only(start: padding, end: spacing),
+              child: Text.rich(TextSpan(text: no), style: _style),
+            ),
+            Expanded(child: child),
+          ],
+        ),
       ),
     );
   }
