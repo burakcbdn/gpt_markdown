@@ -161,12 +161,12 @@ class GptMarkdown extends StatelessWidget {
   Widget build(BuildContext context) {
     String tex = data.trim();
     tex = tex.replaceAllMapped(
-      RegExp(r"(?<!\\)\$\$(.*?)(?<!\\)\$\$", dotAll: true),
+      RegExp(r"(?<!\\)\$\$(.*?)(?<!\\)\$\$(?!\d)", dotAll: true),
       (match) => "\\[${match[1] ?? ""}\\]",
     );
     if (!tex.contains(r"\(")) {
       tex = tex.replaceAllMapped(
-        RegExp(r"(?<!\\)\$(.*?)(?<!\\)\$"),
+        RegExp(r"(?<!\\)\$(.*?)(?<!\\)\$(?!\d)"),
         (match) => "\\(${match[1] ?? ""}\\)",
       );
       tex = tex.splitMapJoin(
